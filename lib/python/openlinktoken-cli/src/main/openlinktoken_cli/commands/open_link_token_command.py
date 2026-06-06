@@ -204,7 +204,12 @@ class OpenLinkTokenCommand:
     @staticmethod
     def _should_show_banner(args):
         """Return whether the current argv should display the CLI banner."""
-        return not args or OpenLinkTokenCommand._is_help_request(args)
+        return not args or OpenLinkTokenCommand._is_help_request(args) or OpenLinkTokenCommand._is_command_overview_request(args)
+
+    @staticmethod
+    def _is_command_overview_request(args):
+        """Check if the command likely displays a subcommand usage overview."""
+        return len(args) == 1 and not args[0].startswith("-")
 
     @staticmethod
     def _should_start_version_check(parsed_args: argparse.Namespace) -> bool:

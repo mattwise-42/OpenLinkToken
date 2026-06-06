@@ -797,6 +797,17 @@ class TestOpenLinkTokenCommand:
         assert "Privacy-Preserving Record Linkage v" in captured.out
         assert "usage: olt" in captured.out
 
+    def test_decrypt_overview_shows_banner_for_interactive_runs(self, monkeypatch, capsys):
+        """Interactive subcommand overview output should include the Open Link Token banner."""
+        monkeypatch.setattr("sys.stdout.isatty", lambda: True)
+
+        exit_code = OpenLinkTokenCommand.execute(["decrypt"])
+
+        captured = capsys.readouterr()
+        assert exit_code == 2, "Subcommand overview should preserve argparse exit code"
+        assert "Privacy-Preserving Record Linkage v" in captured.out
+        assert "usage: olt decrypt" in captured.err
+
     def test_version_does_not_show_banner_for_interactive_runs(self, monkeypatch, capsys):
         """Interactive non-help output should not include the Open Link Token banner."""
         monkeypatch.setattr("sys.stdout.isatty", lambda: True)
